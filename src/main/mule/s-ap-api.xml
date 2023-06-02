@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="implementing_S_AS_interface_Fow" doc:id="38e8a2d9-9b11-4b28-8a83-c1a7f7ec9b00" >
+		<jms:listener doc:name="On New Message for AS queue" doc:id="ed2e8a18-782f-4fff-959e-3b385d1f9d8c" config-ref="JMS_Config" destination="${activeMQ.client.S.AS.FIFO}">
+			<jms:consumer-type >
+				<jms:queue-consumer />
+			</jms:consumer-type>
+		</jms:listener>
+		<logger level="INFO" doc:name="Starting of S_AS_API listener" doc:id="f6d6c7ca-98c7-49e4-840e-9fe984ee83ad" message='"Starting of S_AS_API listener"' />
+		<set-variable value="${OMSfilespath}" doc:name="filespath variable for file path" doc:id="354e76bb-88b3-400f-9fda-feef1232ae0f" variableName="filepath" />
+		<ee:transform doc:name="mapping for bussiness need" doc:id="3269f356-5488-4497-91d1-f6a21cb9785d" >
+			<ee:message >
+				<ee:set-payload resource="dwl/mappingFromObjectoFile.dwl" />
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each for each object inside the queue" doc:id="b16b0f02-9721-496b-ad85-ad9590b13adc" >
+			<logger level="DEBUG" doc:name="Each Payload for loop" doc:id="78d59933-a220-48da-928b-513ea1a1b2d3" message="#[payload]"/>
+			<ftp:write doc:id="eade6d9c-6417-4b66-a049-114125fb9aca" config-ref="FTP_Config" path='#[output application/json&#10;---&#10;&#10;vars.filepath ++"/"++ payload.ProjectID ++ (now() as String {format: "dd-MM HH:mm:ss.SSS"}) ++ ".json"]' doc:name="Write in project folder " />
+		</foreach>
+		<logger level="INFO" doc:name="End of for loop" doc:id="274754f7-3956-4fab-bd11-b86aa1abd2d4" message='"End of for loop"'/>
+		<ee:transform doc:name="return response" doc:id="9c196fea-e3bf-4a95-8404-8373013cbbd3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message:"file created successfully"
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End of the S_AS Interface" doc:id="6bb374f5-e7b1-416e-ad61-730f4164a46e" message='"End of the S_AS Interface"' />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate on FTP" doc:id="fdffdf57-8fb0-443b-81b2-ee7b1233e1bd" type="FTP:ACCESS_DENIED, FTP:CONNECTIVITY, FTP:FILE_ALREADY_EXISTS, FTP:FILE_LOCK" >
+				<logger level="ERROR" doc:name="Logger for FTP user" doc:id="4cbffa9c-aea2-4e30-99c2-fa0c617b9e25" message='#["FTP connectivity issue found"]' />
+				<ee:transform doc:name="Error response of FTP" doc:id="c248f27d-beeb-4fa0-83ff-7deed76780da" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "FTP connectivity issue found"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate JMS" doc:id="bd94c532-fa2e-4059-9ccd-a608b79fc274" type="JMS:ACK, JMS:CONNECTIVITY, JMS:CONSUMING, JMS:DESTINATION_NOT_FOUND, JMS:RETRY_EXHAUSTED, JMS:SECURITY" >
+				<logger level="ERROR" doc:name="Logger for JSM CONNECTIVITY" doc:id="966f412d-c2ef-4f38-abd3-2a4786b25edf" message='#["JSM connectivity issue found"]' />
+				<ee:transform doc:name="Error response of JSM" doc:id="56153a79-3897-4035-8fdc-3bbeba92c246" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "JSM connectivity issue found"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2bd7b2b7-77cd-4236-8756-edf27c7c8d54" type="ANY" >
+				<logger level="ERROR" doc:name="Logger form any" doc:id="2e3c423a-3ed6-4412-b862-debc349cedb3" message='#["Error found"]' />
+				<ee:transform doc:name="Error response" doc:id="fcd1ff50-ad77-465b-a640-c451625cf0b0" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Error found"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="jsmQueueInput" format="json">
+      <types:shape format="weave" example="inputData/jsmQueueData.json"><![CDATA[%dw 2.0
+
+type jsmQueueInput = Array<{|  FileName: String,   CostObjectHierarchyLevel: String,   ASInterface: String,   SalesForceInterface: String,   SAPInterFace: String,   OMSInterface: String,   ProjectID: String,   ProjectTitle: String,   TotalInvestmentAmount: String,   ExpensePlannedTotalInstalledCost: String,   CapitalPlannedTotalInstalledCost: String,   WorkingCapital: String,   HierarchyPathID: String,   CostObjectName: String,   SAPP3PlannedCosts: String,   SAPP1PlannedCosts: String,   SAPSettlementRule1: String,   ProjectWBSInterfaceFilterHOURLYCO: String,   ProjectWBSInterfaceHRAPIEXPTEXT: String,   LastUpdateDate: String,   OriginalBudget: String,   CurrentBudget: String,   Default: String,   Materials: String,   Construction: String,   Engineering: String,   Cost: String,   StartUp: String,   Equipment: String|}> {"example": "[{\\\"FileName\\\":\\\"WBSExport_20220510_15424.txt\\\",\\\"CostObjectHierarchyLevel\\\":\\\"2\\\",\\\"ASInterface\\\":\\\"false\\\",\\\"SalesForceInterface\\\":\\\"true\\\",\\\"SAPInterFace\\\":\\\"false\\\",\\\"OMSInterface\\\":\\\"false\\\",\\\"ProjectID\\\":\\\"PROJECT-K103244\\\",\\\"ProjectTitle\\\":\\\"OMS PROJECT #1 - CPG\\\",\\\"TotalInvestmentAmount\\\":\\\"10000\\\",\\\"ExpensePlannedTotalInstalledCost\\\":\\\"10000\\\",\\\"CapitalPlannedTotalInstalledCost\\\":\\\"0\\\",\\\"WorkingCapital\\\":\\\"0\\\",\\\"HierarchyPathID\\\":\\\"PROJECT-K103244.01.00\\\",\\\"CostObjectName\\\":\\\"PDRI Category\\\",\\\"SAPP3PlannedCosts\\\":\\\"0\\\",\\\"SAPP1PlannedCosts\\\":\\\"0\\\",\\\"SAPSettlementRule1\\\":\\\"0\\\",\\\"ProjectWBSInterfaceFilterHOURLYCO\\\":\\\"Y\\\",\\\"ProjectWBSInterfaceHRAPIEXPTEXT\\\":\\\"2020-07-10 11:00:00\\\",\\\"LastUpdateDate\\\":\\\"2020-06-30T10:31:15.887-04\\\",\\\"OriginalBudget\\\":\\\"10000\\\",\\\"CurrentBudget\\\":\\\"10000\\\",\\\"Default\\\":\\\"0\\\",\\\"Materials\\\":\\\"0\\\",\\\"Construction\\\":\\\"0\\\",\\\"Engineering\\\":\\\"0\\\",\\\"Cost\\\":\\\"10000\\\",\\\"StartUp\\\":\\\"0\\\",\\\"Equipment\\\":\\\"0\\\"},{\\\"FileName\\\":\\\"WBSExport_20220510_15424.txt\\\",\\\"CostObjectHierarchyLevel\\\":\\\"2\\\",\\\"ASInterface\\\":\\\"false\\\",\\\"SalesForceInterface\\\":\\\"true\\\",\\\"SAPInterFace\\\":\\\"false\\\",\\\"OMSInterface\\\":\\\"false\\\",\\\"ProjectID\\\":\\\"PROJECT-K103244\\\",\\\"ProjectTitle\\\":\\\"OMS PROJECT #1 - CPG\\\",\\\"TotalInvestmentAmount\\\":\\\"10000\\\",\\\"ExpensePlannedTotalInstalledCost\\\":\\\"10000\\\",\\\"CapitalPlannedTotalInstalledCost\\\":\\\"0\\\",\\\"WorkingCapital\\\":\\\"0\\\",\\\"HierarchyPathID\\\":\\\"PROJECT-K103244.02.00\\\",\\\"CostObjectName\\\":\\\"PDRI Category\\\",\\\"SAPP3PlannedCosts\\\":\\\"0\\\",\\\"SAPP1PlannedCosts\\\":\\\"0\\\",\\\"SAPSettlementRule1\\\":\\\"0\\\",\\\"ProjectWBSInterfaceFilterHOURLYCO\\\":\\\"Y\\\",\\\"ProjectWBSInterfaceHRAPIEXPTEXT\\\":\\\"2020-07-10 11:00:00\\\",\\\"LastUpdateDate\\\":\\\"2020-06-30T10:31:15.887-04\\\",\\\"OriginalBudget\\\":\\\"10000\\\",\\\"CurrentBudget\\\":\\\"10000\\\",\\\"Default\\\":\\\"0\\\",\\\"Materials\\\":\\\"0\\\",\\\"Construction\\\":\\\"0\\\",\\\"Engineering\\\":\\\"0\\\",\\\"Cost\\\":\\\"10000\\\",\\\"StartUp\\\":\\\"0\\\",\\\"Equipment\\\":\\\"0\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#3269f356-5488-4497-91d1-f6a21cb9785d">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="jsmQueueInput"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="jsmQueueInput"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
