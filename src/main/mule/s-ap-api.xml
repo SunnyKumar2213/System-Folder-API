@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<jms:queue-consumer />
 			</jms:consumer-type>
 		</jms:listener>
-		<logger level="INFO" doc:name="Starting of S_AS_API listener" doc:id="f6d6c7ca-98c7-49e4-840e-9fe984ee83ad" message='"Starting of S_AS_API listener"' />
+		<logger level="INFO" doc:name="Starting of S_AS_API listener" doc:id="f6d6c7ca-98c7-49e4-840e-9fe984ee83ad" message='"Starting of S_AS_API listener "' />
 		<set-variable value="${OMSfilespath}" doc:name="filespath variable for file path" doc:id="354e76bb-88b3-400f-9fda-feef1232ae0f" variableName="filepath" />
 		<ee:transform doc:name="mapping for bussiness need" doc:id="3269f356-5488-4497-91d1-f6a21cb9785d" >
 			<ee:message >
