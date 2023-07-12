@@ -2,91 +2,50 @@
 
 
 
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.iworks.solutions/skumar/s-ap-api.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.iworks.solutions/skumar/s-ap-api/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
+# Project Name
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+This project involves receiving data from the "On New Message" connector of a JMS Queue (ActiveMQ) and performing various operations on the data. It includes creating a folder if it does not already exist, applying business logic for data transformation, generating separate files for each record if a single data has an array, and uploading the files to an FTP server. The file names are created using the current timestamp and the ProjectId defined in the queue records.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Error handling is a crucial aspect of this project. It handles multiple "On Error" scenarios, such as FTP access denied (FTP:ACCESS_DENIED), FTP connectivity issues (FTP:CONNECTIVITY), file already exists (FTP:FILE_ALREADY_EXISTS), file lock issues (FTP:FILE_LOCK), JMS acknowledgment errors (JMS:ACK), JMS connectivity issues (JMS:CONNECTIVITY), consuming errors (JMS:CONSUMING), destination not found errors (JMS:DESTINATION_NOT_FOUND), retry exhausted errors (JMS:RETRY_EXHAUSTED), and security-related errors (JMS:SECURITY).
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The project also includes comprehensive MUnit test cases to ensure the functionality and reliability of the code. The test cases achieve approximately 80% code coverage. Additionally, third-party tools are effectively mocked during testing to minimize dependencies.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+To maintain security and protect sensitive information, all confidential details such as IDs, passwords, and queue names are stored in a properties file. Access to this file is restricted and can only be granted through environment variables.
+
+## Getting Started
+To get started with this project, follow the steps below:
+
+1. Configure the project to connect to the JMS Queue (ActiveMQ). Update the project's configuration file with the necessary connection details, including the broker URL, username, password, and the queue from which data will be received.
+2. Implement the logic to receive data from the JMS Queue using the "On New Message" connector. Capture the payload and process it according to the defined business logic.
+3. Check if the specified folder exists in the FTP server. If it does not, create the folder to store the files.
+4. Apply the necessary transformations to the received data based on the defined business logic.
+5. Iterate through the data and, if a single data has an array, create separate files for each record. Generate the file names using the current timestamp and the ProjectId defined in the queue records.
+6. Upload the generated files to the FTP server, ensuring that any file name conflicts are appropriately handled.
+7. Implement error handling mechanisms for FTP-related errors, including access denied (FTP:ACCESS_DENIED), connectivity issues (FTP:CONNECTIVITY), file already exists (FTP:FILE_ALREADY_EXISTS), and file lock (FTP:FILE_LOCK) errors.
+8. Handle JMS-related errors, such as acknowledgment errors (JMS:ACK), connectivity issues (JMS:CONNECTIVITY), consuming errors (JMS:CONSUMING), destination not found errors (JMS:DESTINATION_NOT_FOUND), retry exhausted errors (JMS:RETRY_EXHAUSTED), and security-related errors (JMS:SECURITY).
+9. Develop MUnit test cases to validate the functionality and reliability of the code. Aim for code coverage of approximately 80% to ensure comprehensive testing.
+10. Utilize effective mocking techniques to simulate the behavior of third-party tools during testing, minimizing dependencies.
+11. Store all confidential information, such as IDs, passwords, and queue names, in a properties file. Ensure that access to this file is restricted and can only be granted through environment variables for enhanced security.
+
+## Components and Dependencies
+- JMS Queue (ActiveMQ) for message handling and processing
+- FTP server for file storage and retrieval
+- "On New Message" connector for receiving data from the JMS Queue
+- Folder creation logic for the FTP server
+- Business logic for data transformation
+- File creation and naming logic
+- Error handling mechanisms for FTP and JMS-related errors
+- MUnit test cases for code coverage and validation
+- Mocking of third-party tools for testing purposes
+- Properties file for storing confidential information
+- Environment variables for secure access to confidential data
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+This project facilitates the seamless handling of data received from a JMS Queue, applying business logic, and generating separate files for each record if necessary. It provides robust error handling mechanisms and comprehensive testing through MUnit test cases. The integration with an FTP server enables efficient file storage and retrieval.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## Contributions
+Contributions to this project are welcome. If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This project is licensed under the [MIT License](link-to-your-license-file).
